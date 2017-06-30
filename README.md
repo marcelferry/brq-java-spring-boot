@@ -155,3 +155,35 @@ create Application
 
 update web.xml
 
+# Compilando todos os projetos
+
+Para não precisarmos entrar em cada pasta e executar o processo de build de cada um dos projetos podemos criar um projeto parent, ou gerar apenas um `pom.xml` na raiz dos projetos, com o seguinte conteúdo.
+
+```
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.brq.digital.workshop</groupId>
+	<artifactId>simple-compiler</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>simple-compiler</name>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.7</java.version>
+	</properties>
+	<modules>
+		<module>simple-parent</module>
+		<module>book-rest</module>
+		<module>book-service</module>
+		<module>book-app</module>
+  	</modules>
+</project>
+```
+
+Agora basta executar um comando `mvn clean install` para que processo faça a compilação de todos os projetos, na sequência definida no `pom.xml`.
+
+Caso ocorra um erro na compilação de um projeto, você pode realizar a correção e continuar o processo a partir do último projeto compilado com sucesso, utilizando o comando `mvn <goals> -rf :<projeto>`. Por exemplo caso o projeto `book-service` de algum problema, você poderia continuar utilizando o comando: `mvn clean install -rf :book-service`
+
+
