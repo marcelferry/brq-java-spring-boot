@@ -15,10 +15,10 @@ Vamos criar um projeto utilizando a ferramenta de linha de comando do maven. Est
 
 ```
 mvn archetype:generate  \
--DgroupId=com.brq.digital.workshop  \
--DartifactId=maven-simple-example \
--DarchetypeArtifactId=maven-archetype-quickstart  \
--DinteractiveMode=false
+	-DgroupId=com.brq.digital.workshop  \
+	-DartifactId=maven-simple-example \
+	-DarchetypeArtifactId=maven-archetype-quickstart  \
+	-DinteractiveMode=false
 ```
 
 Agora, acessamos a pasta criada, `cd maven-simple-example`, e executamos uma limpeza no projeto, utilizando `mvn clean`, o goal `clean`, apaga a pasta target, que contém todos os arquivos gerados durante o ciclo de vida de build.
@@ -46,14 +46,14 @@ Vamos criar esse projeto parent da seguinte forma.
 
 ```
 mvn archetype:generate \
--DarchetypeGroupId=org.codehaus.mojo.archetypes \
--DarchetypeArtifactId=pom-root \
--DarchetypeVersion=RELEASE \
--DgroupId=com.brq.digital.workshop \
--DartifactId=simple-parent
+	-DarchetypeGroupId=org.codehaus.mojo.archetypes \
+	-DarchetypeArtifactId=pom-root \
+	-DarchetypeVersion=RELEASE \
+	-DgroupId=com.brq.digital.workshop \
+	-DartifactId=simple-parent
 ```
 
-include
+Para agilizar o nosso workshop, vamos utilizar o SpringBoot que nos auxiliará definindo as dependências necessárias e diminuindo o processo de configuração.
 
 ```
 	<parent>
@@ -63,10 +63,12 @@ include
 		<relativePath />
 	</parent>
 ```
+Essa dependencia fornecerá as dependencias e plugins necessários para configuração, compilação e execução do seu projeto.
 
+Vamos colocar as bibliotecas de referentes aos testes.
 
 ```
-    <dependencies>
+    	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -88,6 +90,8 @@ include
 	</dependencies>
 ```		
 
+Podemos definir configurações em comum para todos os projetos.
+
 ```
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -95,6 +99,8 @@ include
 		<java.version>1.8</java.version>
 	</properties>
 ```
+
+E também configurar os plugins, conforme esse exemplo
 
 ```
 	<plugin>
@@ -108,6 +114,8 @@ include
 		</configuration>
 	</plugin>
 ```
+
+Vamos colocar o puglins do SpringBoot.
 
 ```
 	<plugin>
@@ -124,10 +132,10 @@ Primeiro vamos criar o projeto usando o maven
 
 ```
 mvn archetype:generate  \
--DgroupId=com.brq.digital.workshop  \
--DartifactId=book-rest \
--DarchetypeArtifactId=maven-archetype-quickstart  \
--DinteractiveMode=false 
+	-DgroupId=com.brq.digital.workshop  \
+	-DartifactId=book-rest \
+	-DarchetypeArtifactId=maven-archetype-quickstart  \
+	-DinteractiveMode=false 
 ```
 
 Vamos acessar esse projeto e apagar os arquivos padrões: `App.java` e `AppTest.java`. 
@@ -193,7 +201,7 @@ public class Book {
 	private LocalDate dataCadastro;
 	private boolean ativo;
 	
-    { /* ... getter e setter omitido ... * / }
+    /* ... getter e setter omitido ... * / 
     
 }
 ```
