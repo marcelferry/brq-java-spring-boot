@@ -5,7 +5,7 @@
 	<artifactId>book-rest</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>Servico REST para acesso a base de dados</name>
+	<name>Servico REST para acesso as informações de Livros</name>
 
 	<parent>
 		<groupId>com.brq.digital.workshop</groupId>
@@ -41,10 +41,5 @@
 		    <artifactId>h2</artifactId>
 		    <version>1.4.193</version>
 		</dependency>				
-	</dependencies>
-	
-	<build>
-		<finalName>book-rest</finalName>
-	</build>
-	
+	</dependencies>	
 </project>

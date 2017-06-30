@@ -118,6 +118,10 @@ include
 
 ## Criando um projeto para o serviço REST
 
+Vamos criar um projeto que possa nos fornecer as interfaces de Serviço Rest. Vamos implementar duas interfaces rest, para listagem e busca por id de um livro.
+
+Primeiro vamos criar o projeto usando o maven
+
 ```
 mvn archetype:generate  \
 -DgroupId=com.brq.digital.workshop  \
@@ -126,17 +130,77 @@ mvn archetype:generate  \
 -DinteractiveMode=false 
 ```
 
-`delete App.java`
+Vamos acessar esse projeto e apagar os arquivos padrões: `App.java` e `AppTest.java`. 
 
-`delete AppTest.java`
+Abra o `pom.xml` adicione a referencia a projeto parent:
 
-create Application.java
+```
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.brq.digital.workshop</groupId>
+	<artifactId>book-rest</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>Servico REST para acesso as informações de Livros</name>
+	<parent>
+		<groupId>com.brq.digital.workshop</groupId>
+		<artifactId>simple-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../simple-parent</relativePath>
+	</parent>
+	<properties>
+		<java.version>1.7</java.version>
+	</properties>
+	<dependencies>
+	</dependencies>
+```
+Vamor criar a classe Application.java para iniciar o SpringBoot.
 
-create HelloController.java
+```
+@SpringBootApplication
+public class Application {
+    
+    public static void main(String[] args) {
+    	SpringApplication.run(Application.class, args);
+    }
 
-create HelloControllerTest.java
+}
+```
 
-Vamos incluir a biblioteca JodaTime que melhora comportamento e resolve problemas comuns da biblioteca original de `java.util.Date` da Linguagem.
+Com essa pequena estrutura nós ja temos um projeto web, pronto para ser executado. Para testá-lo vamos executar o comando `mvn clean install` e em seguinda executaremos o comando `mvn spring-boot:run`.
+
+Assim que processo estiver pronto você verá a mensagem:
+
+```
+Started Application in X.xxx seconds (JVM running for X.xxx)
+``` 
+
+Basta acessar o seu navegador com o seguinte endereço:
+
+```
+http://localhost:8080/
+```
+
+Vamos adicionar a nossa classe de Pojo:
+
+```
+public class Book {
+
+	private Long id;
+	private String titulo;
+	private String autor;
+	private String categoria;
+	private BigDecimal preco;
+	private LocalDate dataCadastro;
+	private boolean ativo;
+	
+    { /* ... getter e setter omitido ... * / }
+    
+}
+```
+
+Veremos que a classe apresenta um erro no campo LocalDate (Se você já estiver usando Java8 a classe poderá ser importada diretamente do JDK, mas nesse projeto a intenção é utilizar a biblioteca joda-time). 
+
+Para fazer a correção, primeiramente vamos incluir a biblioteca JodaTime que melhora comportamento e resolve problemas comuns da biblioteca original de `java.util.Date` da Linguagem (pré JDK 8).
 
 ``` 
 		<dependency>
@@ -146,22 +210,90 @@ Vamos incluir a biblioteca JodaTime que melhora comportamento e resolve problema
 		</dependency>	
 ```
 
+Vamos criar a classe BookController.java
+
+```
+@RestController
+@RequestMapping("books")
+public class BookController {
+
+    @RequestMapping(method= RequestMethod.GET)
+    public List<Book> list() {
+        return Arrays.asList(new Book(), new Book());
+    }
+
+    @RequestMapping(value="{id}", method= RequestMethod.GET)
+    public Book findById( @PathVariable("id") Long bookId ) {
+        return new Book();
+    }
+
+}
+```
+Observe que a classe está com a anotação `@RestController`, que já expoe os métodos da classes e já faz os tratamentos para que o retorno seja tratado como Json.
+
+A anotação `@RequestMapping` no nível de classe ajuda a compor o endpoint da api. 
+
+Agora podemos executar novamente o comando `mvn spring-boot:run`, que irá subir o nossa aplicação e poderemos chamar os dois endpoints definidos.
+
+Lista de Todos os Livros
+```
+http://localhost:8080/books
+```
+
+Recupera o livro com Id igual a 1 
+```
+http://localhost:8080/books/1
+```
+
+Para mudarmos o nosso webservice para o uso de uma base de dados precisaremos inserir a dependência da biblioteca de acesso a banco. Para esse projeto vamos usar o spring-data através da inclusão da dependência abaixo: 
+
+```
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+```
+
+De acordo com a base de dados, devemos fazer a inclusão do Driver JDBC em nosso projeto, vamos para testes utilizar o H2 Database, que permite que prototipemos projetos rapidamente, já que em um única biblioteca temos o Driver JDBC e o próprio Database Manager.
+
+```
 		<dependency>
 		    <groupId>com.h2database</groupId>
 		    <artifactId>h2</artifactId>
 		    <version>1.4.193</version>
 		</dependency>
+```
+
+Vamos agora criar uma nova classe em nosso projeto que será reponsável pelas chamadas ao banco de dados.
+
+```
+@Transactional
+public interface BookRepository extends JpaRepository<Book, Long> {
+
+}
+```
+
+Precisaremos adaptar nosso POJO adicionando as anotações referentes ao spring-data (JPA).
+
+```
+@Entity
+@Table(name="BOOK")
+public class Book {
+
+	@Id
+	private Long id;
+	/* ... ignorado ... */
+	
+}
+```
 
 
+```
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
+```
 
 ## Criando um projeto para a camada service
 
