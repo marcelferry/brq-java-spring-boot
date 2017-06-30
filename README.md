@@ -116,6 +116,8 @@ include
 	</plugin>
 ```
 
+## Criando um projeto para o serviço REST
+
 ```
 mvn archetype:generate  \
 -DgroupId=com.brq.digital.workshop  \
@@ -134,12 +136,62 @@ create HelloController.java
 
 create HelloControllerTest.java
 
+Vamos incluir a biblioteca JodaTime que melhora comportamento e resolve problemas comuns da biblioteca original de `java.util.Date` da Linguagem.
+
+``` 
+		<dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		    <version>2.9.7</version>
+		</dependency>	
+```
+
+		<dependency>
+		    <groupId>com.h2database</groupId>
+		    <artifactId>h2</artifactId>
+		    <version>1.4.193</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+## Criando um projeto para a camada service
+
 ```
 mvn archetype:generate  \
 -DgroupId=com.brq.digital.workshop  \
 -DartifactId=book-service \
 -DarchetypeArtifactId=maven-archetype-quickstart  \
 -DinteractiveMode=false 
+```
+
+Vamos incluir a biblioteca JodaTime que melhora comportamento e resolve problemas comuns da biblioteca original de `java.util.Date` da Linguagem.
+Tambẽm será necessário adicionar a biblioteca de registro de logs, e a biblioteca de manipulação de chamadas Rest.
+
+``` 
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>2.7</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.ws.rs</groupId>
+		    <artifactId>javax.ws.rs-api</artifactId>
+		    <version>2.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		    <version>2.9.7</version>
+		</dependency>		
 ```
 
 ```
