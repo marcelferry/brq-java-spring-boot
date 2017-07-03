@@ -33,6 +33,7 @@ public class BookServiceImpl implements BookService {
 			return response.readEntity(new GenericType<BookDTO>() {
 		    });
 		}catch(Exception e){
+			e.printStackTrace();
 			LOGGER.info("BOOK", e);
 			throw new RuntimeException("ERRO");
 		}

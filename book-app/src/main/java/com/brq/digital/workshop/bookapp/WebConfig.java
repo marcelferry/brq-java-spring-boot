@@ -11,7 +11,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.brq.digital.workshop.bookapp"})
+@ComponentScan(basePackages = {"com.brq.digital.workshop"})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
