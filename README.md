@@ -480,34 +480,30 @@ Após a criação, acesse a pasta do projeto `cd book-service`, abra o `pom.xml`
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<name>Projeto camada de acesso a dados</name>
-	
-	<parent>
-		<groupId>com.brq.digital.workshop</groupId>
-		<artifactId>simple-parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
-		<relativePath>../simple-parent</relativePath>
-	</parent>
-	
+
 	<properties>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.7</java.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	      <version>3.8.1</version>
+	      <scope>test</scope>
+	    </dependency>
 	</dependencies>
 ```
 
-Como vamos usar datas em nosso projeto, vamos incluir a biblioteca JodaTime que melhora comportamento e resolve problemas comuns da biblioteca original de `java.util.Date` da Linguagem. Tambẽm será necessário adicionar a biblioteca de registro de logs, e a biblioteca de manipulação de chamadas Rest. Inclue essas três dependências em seu `pom.xml`
+Como vamos usar datas em nosso projeto, vamos incluir a biblioteca JodaTime que melhora comportamento e resolve problemas comuns da biblioteca original de `java.util.Date` da Linguagem. Tambẽm será necessário adicionar a biblioteca de registro de logs. Inclue essas duas dependências em seu `pom.xml`
 
-``` 
+```
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-core</artifactId>
 		    <version>2.7</version>
-		</dependency>
-		<dependency>
-		    <groupId>javax.ws.rs</groupId>
-		    <artifactId>javax.ws.rs-api</artifactId>
-		    <version>2.0.1</version>
 		</dependency>
 		<dependency>
 		    <groupId>joda-time</groupId>
@@ -536,6 +532,50 @@ public class BookDTO {
 ```
 
 ### Serviços
+Vamos adicionar as dependências necessárias para criarmos a parte de componentes do nossa camada de service.
+
+``` 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+```
+Vamos adicionar nas `<propierties>` a seguinte linha:
+
+```
+		<spring.version>4.2.1.RELEASE</spring.version>
+```
+Para tratarmos a chamada do Serviço Rest, vamos adicionar as dependências para tratamento da requisição.
+```
+		<dependency>
+		    <groupId>javax.ws.rs</groupId>
+		    <artifactId>javax.ws.rs-api</artifactId>
+		    <version>2.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.glassfish.jersey.core</groupId>
+		    <artifactId>jersey-client</artifactId>
+		    <version>2.24</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.glassfish.jersey.core</groupId>
+		    <artifactId>jersey-common</artifactId>
+		    <version>2.24</version>
+		</dependency>
+		<dependency>
+	       <groupId>org.glassfish.jersey.media</groupId>
+	       <artifactId>jersey-media-json-jackson</artifactId>
+	       <version>2.24</version>
+	    </dependency>
+```
+
+
 Nesse projeto vamos criar uma interface `BookService.java`:
 
 ```
