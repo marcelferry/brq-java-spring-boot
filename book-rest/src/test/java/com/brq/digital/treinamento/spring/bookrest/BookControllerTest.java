@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.BeanFactory;
 
 import com.brq.digital.workshop.bookrest.BookController;
+import com.brq.digital.workshop.bookrest.BookRepository;
 
 import mockit.Injectable;
 import mockit.Tested;
@@ -23,6 +24,9 @@ public class BookControllerTest {
 		
 	@Tested(fullyInitialized = true)
 	private BookController bookController;
+	
+	@Injectable
+	private BookRepository bookRepository;
 	
 	@Test
 	public void deveList(){
