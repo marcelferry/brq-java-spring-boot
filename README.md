@@ -143,10 +143,14 @@ Podemos configurar plugins para adicionar funcionalidades em nosso processo de b
 O exemplo abaixo adiciona as funcionalidades do SpringBoot ao seus projetos.
 
 ```
-	<plugin>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-maven-plugin</artifactId>
-	</plugin>
+<build>
+	<plugins>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+		</plugin>
+	</plugins>
+</build>
 ```
 
 Após configurarmos o nosso pom.xml, teremos que realizar o processo de build, para que ele esteja disponível para os nossos projetos futuros. Use `mvn clean install`.
