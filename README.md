@@ -71,7 +71,7 @@ Vamos utilizar o Eclipse para facilitar o processo de edição mas continuaremos
 
 Apesar de não ser necessário o uso de SpringBoot para o fim desse treinamento, vamos utilizá-lo para agilizar a construção de nossos projetos, e auxiliar nas dependências necessárias, reduzindo o processo de configuração. 
 
-Veja que essa dependência que estamos inserindo é tambem um projeto parent, que personalizará completamente o nosso projeto.
+Veja que essa dependência que estamos inserindo é tambem um projeto parent, que personalizará completamente o nosso projeto. Insira o bloco abaixo no `pom.xml` 
 
 ```
 	<parent>
