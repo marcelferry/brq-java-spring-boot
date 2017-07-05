@@ -182,6 +182,10 @@ Abra o `pom.xml` adicione a referência a projeto parent que acabamos de criar:
 		<java.version>1.7</java.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 	</dependencies>
 ```
 Vamor criar a classe Application.java para iniciar o SpringBoot.
