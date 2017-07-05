@@ -125,7 +125,9 @@ Podemos definir configurações em comum para todos os projetos, essas configura
 
 ### Plugins
 
-Podemos configurar plugins para adicionar funcionalidades em nosso processo de build. O trecho abaixo define o plugin padrão de compilação do pacote. Perceba que no cõdigo temos um `${maven-compiler-plugin.version}` utilizado para definir a versão do plugin que será utilizada. Esse valor, `maven-compiler-plugin.version`, terá que ser definido em um block `<properties></properties>` no pom.xml ou em um projeto parent.
+Podemos configurar plugins para adicionar funcionalidades em nosso processo de build. 
+
+O trecho de exemplo abaixo define o plugin padrão de compilação do pacote. Perceba que no cõdigo temos um `${maven-compiler-plugin.version}` utilizado para definir a versão do plugin que será utilizada. Esse valor, `maven-compiler-plugin.version`, terá que ser definido em um block `<properties></properties>` no pom.xml ou em um projeto parent. (Não vamos inserir esse código em nosso projeto)
 
 ```
 	<plugin>
@@ -140,7 +142,7 @@ Podemos configurar plugins para adicionar funcionalidades em nosso processo de b
 	</plugin>
 ```
 
-O exemplo abaixo adiciona as funcionalidades do SpringBoot ao seus projetos.
+Insira o trecho abaixo em seu `pom.xml`, o qual insere as funcionalidades de compilação do SpringBoot ao seus projetos.
 
 ```
 <build>
