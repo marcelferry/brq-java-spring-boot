@@ -59,6 +59,14 @@ Você pode personilizar o parametro `-DgroupId` e `-DartifactId` para o nome do 
 
 Após criado, vamos entrar em nosso projeto `cd simple-parent`, e ver que existe apenas um arquivo `pom.xml`. Nesse arquivo vamos personalizar tudo o que queremos que seja herdado pelo nosso projeto.
 
+### Abrindo o projeto no Eclipse
+
+Vamos importar o projeto no Eclipse usando o item de menu `File -> Import...`, na caixa de dialógo `Import`, escolha `Maven -> Existing Maven Projects`. 
+
+Na caixa de dialógo `Import Maven Projects`, utilize o botão `Browse...` para localizar a pasta onde criamos nosso projeto `simple-parent`, e selecionar o arquivo `pom.xml` . Clique em `Finish`, para o projeto ser importado.
+
+Vamos utilizar o Eclipse para facilitar o processo de edição mas continuaremos a usar a linha de comando para compilar o nosso projeto.
+
 ### SpringBoot
 
 Apesar de não ser necessário o uso de SpringBoot para o fim desse treinamento, vamos utilizá-lo para agilizar a construção de nossos projetos, e auxiliar nas dependências necessárias, reduzindo o processo de configuração. 
@@ -143,6 +151,7 @@ O exemplo abaixo adiciona as funcionalidades do SpringBoot ao seus projetos.
 
 Após configurarmos o nosso pom.xml, teremos que realizar o processo de build, para que ele esteja disponível para os nossos projetos futuros. Use `mvn clean install`.
 
+
 ## Criando um projeto para o serviço REST
 
 ### Setup Inicial
@@ -160,6 +169,8 @@ mvn archetype:generate  \
 	-DarchetypeArtifactId=maven-archetype-quickstart  \
 	-DinteractiveMode=false 
 ```
+
+Faça a importação do projeto no Eclipse da mesma forma que fizemos com o projeto `simple-parent`.
 
 Vamos acessar esse projeto e apagar os arquivos padrões: `App.java` e `AppTest.java`. 
 
@@ -475,7 +486,7 @@ mvn archetype:generate  \
 -DinteractiveMode=false 
 ```
 
-Após a criação, acesse a pasta do projeto `cd book-service`, abra o `pom.xml`, e adicione a referência a projeto parent que de criamos:
+Após a criação, acesse a pasta do projeto `cd book-service`, abra o `pom.xml`, e adicione a referência a projeto parent que de criamos. (Podemos fazer a importação do projeto no Eclipse da mesma forma que fizemos com o projeto `simple-parent`)
 
 ```
     <modelVersion>4.0.0</modelVersion>
@@ -625,6 +636,11 @@ public class BookServiceImpl implements BookService {
 Como esse projeto é um componente, precisaremos fazer o `mvn clean install` para que ele seja implantado em nosso repositório local, e possamos utilizá-lo em nosso projeto principal.
 
 ## Criando nosso Projeto Principal
+
+### Setup Inicial
+
+Vamos criar um projeto Web. Para isso usaremos um arquétipo do tipo webapp.
+
 ```
 mvn archetype:generate -DgroupId=com.brq.digital.workshop \
 -DartifactId=book-app \
@@ -632,11 +648,158 @@ mvn archetype:generate -DgroupId=com.brq.digital.workshop \
 -DinteractiveMode=false
 ```
 
-`mvn eclipse:eclipse -Dwtpversion=2.0`
+Podemos adicionar todos as configurações comuns do Eclipse antes de importá-lo em nosso projeto usando o comando `mvn eclipse:eclipse -Dwtpversion=2.0`.
 
-create Application
+Podemos fazer a importação do projeto no Eclipse da mesma forma que fizemos com o projeto `simple-parent`.
 
-update web.xml
+```
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.brq.digital.workshop</groupId>
+	<artifactId>book-app</artifactId>
+	<packaging>war</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>Camada de Visao do Projeto de Livros</name>
+
+	<parent>
+		<groupId>com.brq.digital.workshop</groupId>
+		<artifactId>simple-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../simple-parent</relativePath>
+	</parent>
+	
+	<properties>
+		<java.version>1.7</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>book-app</finalName>
+	</build>
+```
+
+### Vamos nosso Hello World em Rest
+
+Vamos criar uma classe Application: 
+
+```
+@RestController
+@SpringBootApplication
+@EnableAutoConfiguration
+public class Application {
+	
+    
+    @RequestMapping("/")
+    public String index() {
+        return "Hello World";
+    }
+    
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+
+Vamos atualizar o nosso web.xml:
+
+```
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+</web-app>
+```
+
+Para testá-lo vamos executar o comando `mvn clean install` e em seguinda executaremos o comando `mvn spring-boot:run`.
+
+Assim que o processo estiver pronto você verá a mensagem:
+
+```
+Started Application in X.xxx seconds (JVM running for X.xxx)
+``` 
+Basta acessar o seu navegador com o seguinte endereço:
+
+```
+http://localhost:8080/
+```
+O resultado será:
+```
+Hello World
+```
+
+### Melhorando o nosso projeto
+
+Vamos agora movimentar a `index.jsp` que está em nosso projeto para a pasta `WEB-INF/views`. 
+
+Criaremos agora uma classe chamada `IndexController.java`
+
+```
+@Controller
+public class IndexController {
+
+}
+```
+
+e mover o método:
+
+```   
+    @RequestMapping("/")
+    public String index() {
+        return "Hello World";
+    }
+```
+
+do arquivo `Application.java` para o arquivo `IndexController.java` fazendo uma pequena alteração no retorno do método:
+
+```
+    @RequestMapping("/")
+    public String index() {
+        return "index";
+    }
+```
+
+Vamos remover a anotação `@EnableAutoConfiguration` da classe `Application` e criar uma nova classe com o seguinte conteúdo
+
+```
+@Configuration
+@EnableWebMvc
+@ComponentScan(basePackages = {"com.brq.digital.workshop"})
+public class WebConfig extends WebMvcConfigurerAdapter {
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/views/");
+        resolver.setSuffix(".jsp");
+        resolver.setExposeContextBeansAsAttributes(true);
+        return resolver;
+    }
+
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+} 
+```
+
+Para testá-lo vamos executar o comando `mvn clean install` e em seguinda executaremos o comando `mvn spring-boot:run`.
+
+Assim que o processo estiver pronto, basta acessar o seu navegador com o seguinte endereço:
+
+```
+http://localhost:8080/
+```
+O resultado será:
+```
+Hello World
+```
+
+
 
 # Compilando todos os projetos
 
