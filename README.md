@@ -726,6 +726,24 @@ Podemos fazer a importação do projeto no Eclipse da mesma forma que fizemos co
 	</build>
 ```
 
+Se quiser acertar o carregamento das dependências, pode executar o comando `mvn clean package`. Se o fizer, poderá ter um erro como esse: 
+
+
+```console
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 53.017 s
+[INFO] Finished at: 2017-07-06T10:34:29-03:00
+[INFO] Final Memory: 25M/229M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:1.5.3.RELEASE:repackage (default) on project book-rest: Execution def
+ault of goal org.springframework.boot:spring-boot-maven-plugin:1.5.3.RELEASE:repackage failed: Unable to find main class -> [Help 1]
+[ERROR]
+...
+```
+
+Isso pode ocorrer pois ainda não criamos nossa classe main do SpringBoot.
+
 ### Vamos nosso Hello World em Rest
 
 Vamos criar uma classe Application: 
