@@ -1,13 +1,15 @@
-package com.brq.digital.treinamento.spring.bookrest;
+package com.brq.digital.workshop.bookapp;
+
+import static org.junit.Assert.assertNotNull;
 
 import javax.servlet.http.HttpSession;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.brq.digital.workshop.bookrest.BookController;
-import com.brq.digital.workshop.bookrest.BookRepository;
+import com.brq.digital.workshop.bookservice.BookService;
 
 import mockit.Injectable;
 import mockit.Tested;
@@ -26,17 +28,13 @@ public class BookControllerTest {
 	private BookController bookController;
 	
 	@Injectable
-	private BookRepository bookRepository;
+	private BookService bookService;
 	
-	@Test
-	public void deveList(){
-		bookController.list();
-	}
 	
 	@Test
 	public void devefindById(){
-		Long bookId = 1L;
-		bookController.findById(bookId);
+			ModelAndView modelAndView = bookController.obtemLivro(1);
+			assertNotNull(modelAndView);
 	}
 	
 }
