@@ -15,7 +15,7 @@ Vamos criar um projeto utilizando a ferramenta de linha de comando do maven. A f
 
 Utilize o comando abaixo para criar o nosso primeiro projeto. Este projeto terá sua estrutura com base no arquétipo de inicio rápido que nos dará uma classe para `com.brq.digital.workshop.App` e um caso de teste `com.brq.digital.workshop.AppTest`. Você pode personilizar o parametro `-DgroupId` e `-DartifactId` para o nome do grupo e do artefato de sua escolha.
 
-```
+```console
 mvn archetype:generate  \
 	-DgroupId=com.brq.digital.workshop  \
 	-DartifactId=maven-simple-example \
@@ -29,7 +29,7 @@ Apõs o processo de limpeza, vamos executar `mvn package`, que serã responsáve
 
 No caso de sucesso o nosso pacote estára compilado e disponível para execução.
 
-```
+```console
 java -cp target/maven-simple-example-1.0-SNAPSHOT.jar com.brq.digital.workshop.App
 ```
 
@@ -46,7 +46,7 @@ Quando montamos uma arquitetura "foda", e desejamos que todo projeto tenha acess
 
 Vamos criar esse projeto parent da seguinte forma.
 
-```
+```console
 mvn archetype:generate \
 	-DarchetypeGroupId=org.codehaus.mojo.archetypes \
 	-DarchetypeArtifactId=pom-root \
@@ -168,7 +168,7 @@ Vamos implementar duas interfaces rest, para listagem e busca por id de um livro
 
 Primeiro vamos criar o projeto usando o maven
 
-```
+```console
 mvn archetype:generate  \
 	-DgroupId=com.brq.digital.workshop  \
 	-DartifactId=book-rest \
@@ -211,7 +211,7 @@ Caso ele não faça, ou estivermos usando a linha de comando, vamos executar o c
 
 Nos dois casos, por causa do uso do spring boot, o maven deverá baixar todas as bibliotecas, mas poderá ocorrer um erro conforme abaixo: 
 
-```
+```console
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time: 53.017 s
@@ -243,7 +243,7 @@ Com essa pequena estrutura nós ja temos um projeto web, pronto para ser executa
 
 Assim que processo estiver pronto você verá a mensagem:
 
-```
+```console
 Started Application in X.xxx seconds (JVM running for X.xxx)
 ``` 
 Basta acessar o seu navegador com o seguinte endereço:
@@ -521,7 +521,7 @@ O Spring nos fornece uma biblioteca que também automatiza o nosso trabalho de c
 
 Vamos criar um componente que será utilizado pelo nossa camada principal para acesso aos dados:
 
-```
+```console
 mvn archetype:generate  \
 -DgroupId=com.brq.digital.workshop  \
 -DartifactId=book-service \
@@ -684,7 +684,7 @@ Como esse projeto é um componente, precisaremos fazer o `mvn clean install` par
 
 Vamos criar um projeto Web. Para isso usaremos um arquétipo do tipo webapp.
 
-```
+```console
 mvn archetype:generate -DgroupId=com.brq.digital.workshop \
 -DartifactId=book-app \
 -DarchetypeArtifactId=maven-archetype-webapp \
