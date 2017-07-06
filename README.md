@@ -15,7 +15,7 @@ Vamos criar um projeto utilizando a ferramenta de linha de comando do maven. A f
 
 Utilize o comando abaixo para criar o nosso primeiro projeto. Este projeto terá sua estrutura com base no arquétipo de inicio rápido que nos dará uma classe para `com.brq.digital.workshop.App` e um caso de teste `com.brq.digital.workshop.AppTest`. Você pode personilizar o parametro `-DgroupId` e `-DartifactId` para o nome do grupo e do artefato de sua escolha.
 
-```
+```console
 mvn archetype:generate  \
 	-DgroupId=com.brq.digital.workshop  \
 	-DartifactId=maven-simple-example \
@@ -29,7 +29,7 @@ Apõs o processo de limpeza, vamos executar `mvn package`, que serã responsáve
 
 No caso de sucesso o nosso pacote estára compilado e disponível para execução.
 
-```
+```console
 java -cp target/maven-simple-example-1.0-SNAPSHOT.jar com.brq.digital.workshop.App
 ```
 
@@ -46,7 +46,7 @@ Quando montamos uma arquitetura "foda", e desejamos que todo projeto tenha acess
 
 Vamos criar esse projeto parent da seguinte forma.
 
-```
+```console
 mvn archetype:generate \
 	-DarchetypeGroupId=org.codehaus.mojo.archetypes \
 	-DarchetypeArtifactId=pom-root \
@@ -71,9 +71,9 @@ Vamos utilizar o Eclipse para facilitar o processo de edição mas continuaremos
 
 Apesar de não ser necessário o uso de SpringBoot para o fim desse treinamento, vamos utilizá-lo para agilizar a construção de nossos projetos, e auxiliar nas dependências necessárias, reduzindo o processo de configuração. 
 
-Veja que essa dependência que estamos inserindo é tambem um projeto parent, que personalizará completamente o nosso projeto.
+Veja que essa dependência que estamos inserindo é tambem um projeto parent, que personalizará completamente o nosso projeto. Insira o bloco abaixo no `pom.xml` 
 
-```
+```xml
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -88,7 +88,7 @@ Eele fornecerá as dependências e plugins necessários para configuração, com
 
 A nossa arquitetura utilizará bibliotecas adicionas para melhorarmos o processo de testes mockados. Vamos então, adicionar as bibliotecas de referentes aos testes no `pom.xml` de nosso projeto parent.
 
-```
+```xml
     <dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -115,7 +115,7 @@ A nossa arquitetura utilizará bibliotecas adicionas para melhorarmos o processo
 
 Podemos definir configurações em comum para todos os projetos, essas configurações podem ser palavras chaves já reservadas e utilizadas pelo maven ou por outros plugins, como também criar novas variaveis que poderão ser utilizadas no próprio contexto do pom.
 
-```
+```xml
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -125,9 +125,11 @@ Podemos definir configurações em comum para todos os projetos, essas configura
 
 ### Plugins
 
-Podemos configurar plugins para adicionar funcionalidades em nosso processo de build. O trecho abaixo define o plugin padrão de compilação do pacote. Perceba que no cõdigo temos um `${maven-compiler-plugin.version}` utilizado para definir a versão do plugin que será utilizada. Esse valor, `maven-compiler-plugin.version`, terá que ser definido em um block `<properties></properties>` no pom.xml ou em um projeto parent.
+Podemos configurar plugins para adicionar funcionalidades em nosso processo de build. 
 
-```
+O trecho de exemplo abaixo define o plugin padrão de compilação do pacote. Perceba que no cõdigo temos um `${maven-compiler-plugin.version}` utilizado para definir a versão do plugin que será utilizada. Esse valor, `maven-compiler-plugin.version`, terá que ser definido em um block `<properties></properties>` no pom.xml ou em um projeto parent. (Não vamos inserir esse código em nosso projeto)
+
+```xml
 	<plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-compiler-plugin</artifactId>
@@ -140,13 +142,17 @@ Podemos configurar plugins para adicionar funcionalidades em nosso processo de b
 	</plugin>
 ```
 
-O exemplo abaixo adiciona as funcionalidades do SpringBoot ao seus projetos.
+Insira o trecho abaixo em seu `pom.xml`, o qual insere as funcionalidades de compilação do SpringBoot ao seus projetos.
 
-```
-	<plugin>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-maven-plugin</artifactId>
-	</plugin>
+```xml
+<build>
+	<plugins>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+		</plugin>
+	</plugins>
+</build>
 ```
 
 Após configurarmos o nosso pom.xml, teremos que realizar o processo de build, para que ele esteja disponível para os nossos projetos futuros. Use `mvn clean install`.
@@ -162,7 +168,7 @@ Vamos implementar duas interfaces rest, para listagem e busca por id de um livro
 
 Primeiro vamos criar o projeto usando o maven
 
-```
+```console
 mvn archetype:generate  \
 	-DgroupId=com.brq.digital.workshop  \
 	-DartifactId=book-rest \
@@ -172,11 +178,11 @@ mvn archetype:generate  \
 
 Faça a importação do projeto no Eclipse da mesma forma que fizemos com o projeto `simple-parent`.
 
-Vamos acessar esse projeto e apagar os arquivos padrões: `App.java` e `AppTest.java`. 
+Vamos acessar esse projeto e apagar os arquivos padrões: `App.java` e `AppTest.java`, que serão substituídos pelos arquivos que ainda iremos criar.
 
-Abra o `pom.xml` adicione a referência a projeto parent que acabamos de criar:
+Abra o `pom.xml` adicione a referência a projeto parent que acabamos de criar, subistituindo todo conteúdo da tag `<project></project>`:
 
-```
+```xml
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.brq.digital.workshop</groupId>
 	<artifactId>book-rest</artifactId>
@@ -199,9 +205,31 @@ Abra o `pom.xml` adicione a referência a projeto parent que acabamos de criar:
 		</dependency>
 	</dependencies>
 ```
-Vamor criar a classe Application.java para iniciar o SpringBoot.
+Quando usamos o eclipse, ele automaticamente baixa as dependências do projeto, permitindo assim que possamos continuar o desenvolvimento sem precisar executar o maven para baixá-las a cada vez que alteramos o `pom.xml`. 
 
+Caso ele não faça, ou estivermos usando a linha de comando, vamos executar o comando `mvn clean install`, e se quiser forçar o Eclipse, use o botão direito no projeto, clique em `Run as... -> maven install`. 
+
+Nos dois casos, por causa do uso do spring boot, o maven deverá baixar todas as bibliotecas, mas poderá ocorrer um erro conforme abaixo: 
+
+```console
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 53.017 s
+[INFO] Finished at: 2017-07-06T10:34:29-03:00
+[INFO] Final Memory: 25M/229M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:1.5.3.RELEASE:repackage (default) on project book-rest: Execution def
+ault of goal org.springframework.boot:spring-boot-maven-plugin:1.5.3.RELEASE:repackage failed: Unable to find main class -> [Help 1]
+[ERROR]
+...
 ```
+Esse erro será aceitável nesse momento, pois indica que o plugin do spring-boot não localizou uma classe main para usar como executável inicilizador do projeto.
+
+Caso após esse processo, o eclipse continuar a exibir o seu projeto com erro (ícone vermelho) sem ter erro em código fonte ou xml, use o botão direito no projeto, clique em `Maven -> Update Project...`. Para que o eclipse possa acessar todas as bibliotecas utilizadas pelo maven no seu projeto. 
+
+Vamor agora criar a classe Application.java para iniciar o SpringBoot.
+
+```java
 @SpringBootApplication
 public class Application {
     
@@ -215,7 +243,7 @@ Com essa pequena estrutura nós ja temos um projeto web, pronto para ser executa
 
 Assim que processo estiver pronto você verá a mensagem:
 
-```
+```console
 Started Application in X.xxx seconds (JVM running for X.xxx)
 ``` 
 Basta acessar o seu navegador com o seguinte endereço:
@@ -223,6 +251,21 @@ Basta acessar o seu navegador com o seguinte endereço:
 ```
 http://localhost:8080/
 ```
+
+Hávera um erro, parecido ao trecho abaixo, já que ainda não colocamos nenhum conteúdo para ser visiualizado em nosso projeto.
+
+```
+Whitelabel Error Page
+
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+Thu Jul 06 07:19:26 BRT 2017
+There was an unexpected error (type=Not Found, status=404).
+No message available
+```
+
+Esse erro arrumaremos assim que disponibilizarmos conteúdo.
+
 Por default o projeto é executado na porta 8080. Para mudarmos essa configuração podemos criar uma arquivo `application.properties` na pasta `src/main/resources` com o seguinte conteúdo:
 
 ```
@@ -237,7 +280,7 @@ http://localhost:8083/
 
 Vamos adicionar a nossa classe de Pojo:
 
-```
+```java
 public class Book {
 
 	private Long id;
@@ -257,7 +300,7 @@ Veremos que a classe apresenta um erro no campo LocalDate (Se você já estiver 
 
 Para fazer a correção, primeiramente vamos incluir a biblioteca JodaTime que melhora o comportamento e resolve problemas comuns da biblioteca original de `java.util.Date` da Linguagem (pré JDK 8). Inclua o seguinte bloco no `pom.xml` de nosso projeto.
 
-``` 
+``` xml
 		<dependency>
 		    <groupId>joda-time</groupId>
 		    <artifactId>joda-time</artifactId>
@@ -269,7 +312,7 @@ Para fazer a correção, primeiramente vamos incluir a biblioteca JodaTime que m
 
 Vamos criar uma classe chamada `BookController.java`
 
-```
+```java
 @RestController
 @RequestMapping("books")
 public class BookController {
@@ -306,7 +349,7 @@ http://localhost:8083/books/1
 
 Para mudarmos o nosso webservice para o uso de uma base de dados precisaremos inserir a dependência da biblioteca de acesso a banco. Para esse projeto vamos usar o spring-data através da inclusão da dependência abaixo em nosso `pom.xml`. 
 
-```
+```xml
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -315,7 +358,7 @@ Para mudarmos o nosso webservice para o uso de uma base de dados precisaremos in
 
 De acordo com a base de dados, devemos fazer a inclusão do Driver JDBC em nosso projeto, vamos para testes, utilizar o H2 Database, que permite que prototipemos projetos rapidamente, já que em um única biblioteca temos o Driver JDBC e o próprio Database Manager. Insirá o bloco abaixo no `pom.xml`
 
-```
+```xml
 		<dependency>
 		    <groupId>com.h2database</groupId>
 		    <artifactId>h2</artifactId>
@@ -327,7 +370,7 @@ O spring-data, abstrai o acesso a base de dados, fornecendo as principais opera�
 
 Com base nisso vamos agora criar uma nova classe em nosso projeto que será reponsável pelas chamadas ao banco de dados.
 
-```
+```java
 @Transactional
 public interface BookRepository extends JpaRepository<Book, Long> {
 
@@ -336,7 +379,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 Precisaremos adaptar nosso POJO adicionando as anotações referentes ao spring-data (JPA).
 
-```
+```java
 @Entity
 @Table(name="BOOK")
 public class Book {
@@ -368,7 +411,7 @@ Os primeiro itens definem as configurações de acesso ao banco. E o último inf
 
 Vamos agora fazer tudo funcionar junto. Vamos alterar a nossa classe `BookController` injetando uma dependência ao nossa classe `BookRepository` da seguinte forma:
 
-```
+```java
 ...
 public class BookController {
 	
@@ -383,13 +426,13 @@ Vamos alterar também os métodos que criamos anteriormente em nossa `BookContro
 
 O método de listagem agora retornará a chamada do método `findAll()`.
 
-```
+```java
     public List<Book> list() {
         return bookRepository.findAll();
     }
 ```
 Já o método de busca por id, vai retornar o método `findOne(K id)`.
-```
+```java
     public Book findById( @PathVariable("id") Long bookId ) {
         return bookRepository.findOne(bookId);
     }
@@ -433,7 +476,7 @@ spring.datasource.data=classpath:data.sql
 
 Vamos agora criar na pasta `src/main/resources` um arquivo `schema.sql` com o seguinte contéudo:
 
-```
+```sql
 DROP TABLE IF EXISTS book;
 
 CREATE TABLE IF NOT EXISTS book (
@@ -448,7 +491,7 @@ CREATE TABLE IF NOT EXISTS book (
 ```
 E também criaremos um arquivo `data.sql` com o seguinte conteúdo.
 
-```
+```sql
 INSERT INTO book VALUES (1, 'Richard', 'Learning Spring Boot', 'Desenvolvimento', 89.90, '2017-07-01', true);
 INSERT INTO book VALUES (2, 'Robert', 'Spring Boot in Action', 'Desenvolvimento', 57.90, '2017-07-03', true);
 ```
@@ -465,7 +508,7 @@ E veremos os dois novos livros cadastrados.
 
 O Spring nos fornece uma biblioteca que também automatiza o nosso trabalho de criação de serviços rest. É o spring-data-rest. Para ver ela em ação basta adicionar a seguinte dependência em nosso `pom.xml` e remover os métodos criados em nossa classe `BookController`.
 
-```
+```xml
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
@@ -478,7 +521,7 @@ O Spring nos fornece uma biblioteca que também automatiza o nosso trabalho de c
 
 Vamos criar um componente que será utilizado pelo nossa camada principal para acesso aos dados:
 
-```
+```console
 mvn archetype:generate  \
 -DgroupId=com.brq.digital.workshop  \
 -DartifactId=book-service \
@@ -488,7 +531,7 @@ mvn archetype:generate  \
 
 Após a criação, acesse a pasta do projeto `cd book-service`, abra o `pom.xml`, e adicione a referência a projeto parent que de criamos. (Podemos fazer a importação do projeto no Eclipse da mesma forma que fizemos com o projeto `simple-parent`)
 
-```
+```xml
     <modelVersion>4.0.0</modelVersion>
 	<groupId>com.brq.digital.workshop</groupId>
 	<artifactId>book-service</artifactId>
@@ -514,7 +557,7 @@ Após a criação, acesse a pasta do projeto `cd book-service`, abra o `pom.xml`
 
 Como vamos usar datas em nosso projeto, vamos incluir a biblioteca JodaTime que melhora comportamento e resolve problemas comuns da biblioteca original de `java.util.Date` da Linguagem. Tambẽm será necessário adicionar a biblioteca de registro de logs. Inclue essas duas dependências em seu `pom.xml`
 
-```
+```xml
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-core</artifactId>
@@ -531,7 +574,7 @@ Como vamos usar datas em nosso projeto, vamos incluir a biblioteca JodaTime que 
 
 Vamos criar nosso Pojo que será responsável por representar o retorno do Rest.
 
-```
+```java
 public class BookDTO {
 
 	private Long id;
@@ -549,7 +592,7 @@ public class BookDTO {
 ### Serviços
 Vamos adicionar as dependências necessárias para criarmos a parte de componentes do nossa camada de service.
 
-``` 
+``` xml
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -563,11 +606,11 @@ Vamos adicionar as dependências necessárias para criarmos a parte de component
 ```
 Vamos adicionar nas `<propierties>` a seguinte linha:
 
-```
+```xml
 		<spring.version>4.2.1.RELEASE</spring.version>
 ```
 Para tratarmos a chamada do Serviço Rest, vamos adicionar as dependências para tratamento da requisição.
-```
+```xml
 		<dependency>
 		    <groupId>javax.ws.rs</groupId>
 		    <artifactId>javax.ws.rs-api</artifactId>
@@ -593,7 +636,7 @@ Para tratarmos a chamada do Serviço Rest, vamos adicionar as dependências para
 
 Nesse projeto vamos criar uma interface `BookService.java`:
 
-```
+```java
 public interface BookService {
 	BookDTO obtemLivro(Integer bookId);
 }
@@ -601,7 +644,7 @@ public interface BookService {
 
 E também criaremos uma classe `BookServiceImpl` que implementará `BookService`
 
-```
+```java
 @Component
 public class BookServiceImpl implements BookService {
 	private static final Logger LOGGER = LogManager.getLogger("LOG_NOME");
@@ -641,7 +684,7 @@ Como esse projeto é um componente, precisaremos fazer o `mvn clean install` par
 
 Vamos criar um projeto Web. Para isso usaremos um arquétipo do tipo webapp.
 
-```
+```console
 mvn archetype:generate -DgroupId=com.brq.digital.workshop \
 -DartifactId=book-app \
 -DarchetypeArtifactId=maven-archetype-webapp \
@@ -652,7 +695,7 @@ Podemos adicionar todos as configurações comuns do Eclipse antes de importá-l
 
 Podemos fazer a importação do projeto no Eclipse da mesma forma que fizemos com o projeto `simple-parent`.
 
-```
+```xml
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.brq.digital.workshop</groupId>
 	<artifactId>book-app</artifactId>
@@ -683,11 +726,29 @@ Podemos fazer a importação do projeto no Eclipse da mesma forma que fizemos co
 	</build>
 ```
 
+Se quiser acertar o carregamento das dependências, pode executar o comando `mvn clean package`. Se o fizer, poderá ter um erro como esse: 
+
+
+```console
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 53.017 s
+[INFO] Finished at: 2017-07-06T10:34:29-03:00
+[INFO] Final Memory: 25M/229M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:1.5.3.RELEASE:repackage (default) on project book-rest: Execution def
+ault of goal org.springframework.boot:spring-boot-maven-plugin:1.5.3.RELEASE:repackage failed: Unable to find main class -> [Help 1]
+[ERROR]
+...
+```
+
+Isso pode ocorrer pois ainda não criamos nossa classe main do SpringBoot.
+
 ### Vamos nosso Hello World em Rest
 
 Vamos criar uma classe Application: 
 
-```
+```java
 @RestController
 @SpringBootApplication
 @EnableAutoConfiguration
@@ -707,7 +768,7 @@ public class Application {
 
 Vamos atualizar o nosso web.xml:
 
-```
+```xml
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -732,40 +793,15 @@ O resultado será:
 Hello World
 ```
 
-### Melhorando o nosso projeto
+## Melhorando o nosso projeto
+
+### Configurando o MVC
 
 Vamos agora movimentar a `index.jsp` que está em nosso projeto para a pasta `WEB-INF/views`. 
 
-Criaremos agora uma classe chamada `IndexController.java`
-
-```
-@Controller
-public class IndexController {
-
-}
-```
-
-e mover o método:
-
-```   
-    @RequestMapping("/")
-    public String index() {
-        return "Hello World";
-    }
-```
-
-do arquivo `Application.java` para o arquivo `IndexController.java` fazendo uma pequena alteração no retorno do método:
-
-```
-    @RequestMapping("/")
-    public String index() {
-        return "index";
-    }
-```
-
 Vamos remover a anotação `@EnableAutoConfiguration` da classe `Application` e criar uma nova classe com o seguinte conteúdo
 
-```
+```java
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.brq.digital.workshop"})
@@ -787,6 +823,102 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 } 
 ```
 
+### Entendendo as anotações
+
+A anotação `@Configuration` define que essa classe deverá ser lida como um dos substitutos dos arquivos de configuração do Spring. A anotação `@EnableWebMvc` avisa ao Spring que estamos utilizando um projeto que possui anotações do SpringMvc e que ele deverá carregá-las. A anotação `@ComponentScan` determinar em quais pacotes eu devo buscar as classes anotadas.
+
+A anotação `@Bean` informa ao Spring que ele deve executar aquele método e com o seu resultado criar um bean com o nome do método e que será injetado quando o Spring localizar uma das situações:
+
+```java
+	@Autowired
+	ViewResolver viewResolver;
+    
+    /* ou */
+    
+    @Autowired
+    @Qualifier("viewResolver")
+	ViewResolver viewResolver;
+    
+    /* ou */
+    
+	@Resource
+	ViewResolver viewResolver;
+    
+    /* ou */
+    
+    @Resource
+    @Qualifier("viewResolver")
+	ViewResolver viewResolver;
+        
+    /* ou */
+    
+	@Inject
+	ViewResolver viewResolver;
+    
+    /* ou */
+    
+    @Inject
+    @Qualifier("viewResolver")
+	ViewResolver viewResolver;
+    
+```
+
+Nesse caso o viewResolver não será acessado diretamente, mas é configurado para que o Spring saiba como tratar o retorno de uma controller. No caso configurado acima, quando um método em uma `Controller` retornar uma String como exemplo: `home`, ele irá procurar na pasta `WEB-INF/views` um arquivo com a extensão `.jsp`, assim: `WEB-INF/views/home.jsp`. Se o método retornar uma estrutura de pasta como por exemplo `erro/erro`, ele vai tentar localizar o arquivo: `WEB-INF/views/erro/erro.jsp`.
+
+
+### Chamando nossa página de index
+
+Criaremos agora uma classe chamada `IndexController.java`
+
+```java
+@Controller
+public class IndexController {
+
+}
+```
+
+e mover o método:
+
+```java   
+    @RequestMapping("/")
+    public String index() {
+        return "Hello World";
+    }
+```
+
+do arquivo `Application.java` para o arquivo `IndexController.java` fazendo uma pequena alteração no retorno do método:
+
+```java
+    @RequestMapping("/")
+    public String index() {
+        return "index";
+    }
+```
+
+A anotação `@Controller` torna essa classe rastreável pelo Framework do Spring no momento da configuração do projeto, quando usaremos a anotaçao `@ComponentScan`, para determinar quais pacotes devem ser escanados a procura de componentes. O `@Controller` é apenas uma especialização da anotação `@Component`. Em combinação com a anotação `@RequestMapping` gera o mapeamento de um url para o serviço dessa classe. 
+
+Para entendermos a composição da URL imaginemos a seguinte classe de exemplo: 
+
+```java
+@Controller
+@RequestMapping("pessoas")
+public class PessoaController {
+	@RequestMapping("listar")
+    public String listarPessoas() {
+        return "lista";
+    }
+    
+}
+```
+Considerando que a nossa aplicação rode em uma URL como `http://localhost/`, a classe acima criaria um mapeamento acessível pela composição do `@RequestMapping` anotado na classe + o `@RequestMapping` anotado no método, ficando assim:
+
+```
+http://localhost/pessoas/listar
+```
+
+Como estamos usando o SpringMVC, um retorno do tipo String será tratado como um mapeamento para um arquivo .jsp dentro da pasta `WEB-INF/views`, conforme definimos no nosso bean `ViewResolver` declarado na classe `WebConfig`
+
+
 Para testá-lo vamos executar o comando `mvn clean install` e em seguinda executaremos o comando `mvn spring-boot:run`.
 
 Assim que o processo estiver pronto, basta acessar o seu navegador com o seguinte endereço:
@@ -799,13 +931,158 @@ O resultado será:
 Hello World
 ```
 
+### Adicionando uma nova Controller
+
+Vamos criar uma classe BookController para atuar com as chamadas relacionadas ao Serviço de Livros.
+
+```java
+@Controller
+@RequestMapping("books")
+public class BookController {
+
+}
+
+``` 
+
+Como já vimos, o `@RequestMapping` vai determinar o mapeamento dessa classe, então os métodos dela serão acessíveis através de:
+
+```
+http://localhost:8080/books/
+```
+
+Vamos agora criar um método: 
+
+```java
+	@RequestMapping("{bookId}")
+	public ModelAndView obtemLivro(@PathVariable("bookId") Integer bookId){
+		ModelAndView view = new ModelAndView();
+		view = new ModelAndView("livro");	
+		return view;
+	}
+```
+
+Nesse método que acabamos de criar, o mapeamento é feito para uma variável identificada por `{ }`. Nesse caso ela se chama `{bookId}`. A chamada para acesso a esse método obrigatóriamente deverá conter o seguinte formato:
+
+```
+http://localhost:8080/books/1
+```
+
+Sendo 1, o valor que desejamos atribuir a variavel. Como vemos na implementação do método, a anotação `@PathVariable("bookId")` atribui o valor que for passado na url para a variavel `Integer bookId` do método. Dessa forma essa URL espera um valor inteiro. Caso você passe uma string como no exemplo:
+
+```
+http://localhost:8080/books/listar
+```
+
+O Spring continuará redirecionando a chamada para o mesmo método, mas retornará um erro, já que o valor "listar", não pode ser convertido para inteiro.
+
+Esse método poderia retornar uma String `livro`, mas optamos por usar um objeto um pouco mais completo chamado `ModelView`, que permitira definir o nome da view e quais valores passaremos para ela.
+
+Antes de testarmos precisaremos criar um arquivo `livro.jsp` em `WEB-INF/views/livro.jsp`. Vamos nesse momento usar um conteúdo assim:
+
+```html
+<html>
+<body>
+<h2>Livro!</h2>
+</body>
+</html>
+```
+
+Podemos agora testar novamente nossa aplicação executando o comando `mvn spring-boot:run`.
+
+E acessar a url:
+
+```
+http://localhost:8080/books/1
+```
+
+Nós criamos apenas um mapeamento, veja que se você tentar acessar um endereço não configurado para ver o que acontece:
+
+```
+http://localhost:8080/books/
+```
+
+### Chamando nossa camada de Service
+
+Vamos incluir em nosso projeto a camada de service que criamos anteriormente. Para isso vamos incluir a sua dependência em nosso `pom.xml`
+
+```xml
+		<dependency>
+			<groupId>com.brq.digital.workshop</groupId>
+			<artifactId>book-service</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+```
+
+Lembre-se de ajustar a versão de acordo com a versão compilada e instalada em seu repositório local.
+
+Vamos alterar a `BookController.java` e adicionar na classe a injeção de dependência do `BookService`.
+
+```java	
+	@Autowired
+	BookService bookService;
+```
+
+Depois vamos alterar o nosso método `obtemLivro` para recuperar um livro com base no `bookId`.
+
+```java
+		ModelAndView view = new ModelAndView();
+		
+		try{
+			BookDTO book = bookService.obtemLivro(bookId);
+			view = new ModelAndView("/livro");
+			view.addObject("book",book);
+		} catch (Exception e) {
+			model.setViewName("erro/erro");
+			model.addObject("exception", mensagem);
+			return model;
+		}	
+		return view;
+```
+
+E vamos criar um JSP para melhorar a visualização do dados. Para que o spring-boot possa processar corretamente as JSPs, vamos incluir duas novas dependências.
+
+```xml
+	    <dependency>
+	        <groupId>org.apache.tomcat.embed</groupId>
+	        <artifactId>tomcat-embed-jasper</artifactId>
+	        <scope>provided</scope>
+	    </dependency>
+	    <dependency>
+	        <groupId>javax.servlet</groupId>
+	        <artifactId>jstl</artifactId>
+	    </dependency>
+```
+
+E alterar o nosso `livro.jsp` para o seguinte conteúdo:
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<html>
+<body>
+<h2>Livro!</h2>
+<p>${book.id}</p>
+<p>${book.titulo}</p>
+<p>${book.autor}</p>
+<p>${book.categoria}</p>
+<p>${book.preco}</p>
+</body>
+</html>
+```
+Podemos agora testar novamente nossa aplicação executando o comando `mvn spring-boot:run`.
+
+E acessar a url:
+
+```
+http://localhost:8080/books/1
+```
 
 
 # Compilando todos os projetos
 
 Para não precisarmos entrar em cada pasta e executar o processo de build de cada um dos projetos podemos criar um projeto parent, ou gerar apenas um `pom.xml` na raiz dos projetos, com o seguinte conteúdo.
 
-```
+```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
