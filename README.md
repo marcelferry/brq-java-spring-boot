@@ -779,6 +779,70 @@ Hello World
 
 Vamos agora movimentar a `index.jsp` que está em nosso projeto para a pasta `WEB-INF/views`. 
 
+Vamos remover a anotação `@EnableAutoConfiguration` da classe `Application` e criar uma nova classe com o seguinte conteúdo
+
+```java
+@Configuration
+@EnableWebMvc
+@ComponentScan(basePackages = {"com.brq.digital.workshop"})
+public class WebConfig extends WebMvcConfigurerAdapter {
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/views/");
+        resolver.setSuffix(".jsp");
+        resolver.setExposeContextBeansAsAttributes(true);
+        return resolver;
+    }
+
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+} 
+```
+
+A anotação `@Configuration` define que essa classe deverá ser lida como um dos substitutos dos arquivos de configuração do Spring. A anotação `@EnableWebMvc` avisa ao Spring que estamos utilizando um projeto que possui anotações do SpringMvc e que ele deverá carregá-las. A anotação `@ComponentScan` determinar em quais pacotes eu devo buscar as classes anotadas.
+
+A anotação `@Bean` informa ao Spring que ele deve executar aquele método e com o seu resultado criar um bean com o nome do método e que será injetado quando o Spring localizar uma das situações:
+
+```java
+	@Autowired
+	ViewResolver viewResolver;
+    
+    /* ou */
+    
+    @Autowired
+    @Qualifier("viewResolver")
+	ViewResolver viewResolver;
+    
+    /* ou */
+    
+	@Resource
+	ViewResolver viewResolver;
+    
+    /* ou */
+    
+    @Resource
+    @Qualifier("viewResolver")
+	ViewResolver viewResolver;
+        
+    /* ou */
+    
+	@Inject
+	ViewResolver viewResolver;
+    
+    /* ou */
+    
+    @Inject
+    @Qualifier("viewResolver")
+	ViewResolver viewResolver;
+    
+```
+
+Nesse caso o viewResolver não será acessado diretamente, mas é configurado para que o Spring saiba como tratar o retorno de uma controller. No caso configurado acima, quando um método em uma `Controller` retornar uma String como exemplo: `home`, ele irá procurar na pasta `WEB-INF/views` um arquivo com a extensão `.jsp`, assim: `WEB-INF/views/home.jsp`. Se o método retornar uma estrutura de pasta como por exemplo `erro/erro`, ele vai tentar localizar o arquivo: `WEB-INF/views/erro/erro.jsp`.
+
 Criaremos agora uma classe chamada `IndexController.java`
 
 ```java
@@ -806,29 +870,29 @@ do arquivo `Application.java` para o arquivo `IndexController.java` fazendo uma 
     }
 ```
 
-Vamos remover a anotação `@EnableAutoConfiguration` da classe `Application` e criar uma nova classe com o seguinte conteúdo
+A anotação `@Controller` torna essa classe rastreável pelo Framework do Spring no momento da configuração do projeto, quando usaremos a anotaçao `@ComponentScan`, para determinar quais pacotes devem ser escanados a procura de componentes. O `@Controller` é apenas uma especialização da anotação `@Component`. Em combinação com a anotação `@RequestMapping` gera o mapeamento de um url para o serviço dessa classe. 
+
+Para entendermos a composição da URL imaginemos a seguinte classe de exemplo: 
 
 ```java
-@Configuration
-@EnableWebMvc
-@ComponentScan(basePackages = {"com.brq.digital.workshop"})
-public class WebConfig extends WebMvcConfigurerAdapter {
-
-    @Bean
-    public ViewResolver viewResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/views/");
-        resolver.setSuffix(".jsp");
-        resolver.setExposeContextBeansAsAttributes(true);
-        return resolver;
+@Controller
+@RequestMapping("pessoas")
+public class PessoaController {
+	@RequestMapping("listar")
+    public String listarPessoas() {
+        return "lista";
     }
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
-} 
+    
+}
 ```
+Considerando que a nossa aplicação rode em uma URL como `http://localhost/`, a classe acima criaria um mapeamento acessível pela composição do `@RequestMapping` anotado na classe + o `@RequestMapping` anotado no método, ficando assim:
+
+```
+http://localhost/pessoas/listar
+```
+
+Como estamos usando o SpringMVC, um retorno do tipo String será tratado como um mapeamento para um arquivo .jsp dentro da pasta `WEB-INF/views`, conforme definimos no nosso bean `ViewResolver` declarado na classe `WebConfig`
+
 
 Para testá-lo vamos executar o comando `mvn clean install` e em seguinda executaremos o comando `mvn spring-boot:run`.
 
@@ -841,6 +905,49 @@ O resultado será:
 ```
 Hello World
 ```
+
+### Chamando nossa camada de Service
+
+Vamos incluir em nosso projeto a camada de service que criamos anteriormente. Para isso vamos incluir a sua dependência em nosso `pom.xml`
+
+```xml
+		<dependency>
+			<groupId>com.brq.digital.workshop</groupId>
+			<artifactId>book-service</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+```
+
+Lembre-se de ajustar a versão de acordo com a versão compilada e instalada em seu repositório local.
+
+Vamos criar uma classe BookController para atuar com as chamadas relacionadas ao Serviço de Livros.
+
+```java
+@Controller
+@RequestMapping("books")
+public class BookController extends AbstractController {
+
+}
+
+``` 
+
+Como já vimos, o `@RequestMapping` vai determinar o mapeamento dessa classe, então os métodos dela serão acessíveis através de:
+
+```
+http://localhost/books/
+```
+
+Vamos agora criar um método: 
+
+```java
+	@RequestMapping("{bookId}")
+	public ModelAndView obtemLivro(@PathVariable("bookId") Integer bookId){
+		ModelAndView view = new ModelAndView();
+		view = new ModelAndView("livro");	
+		return view;
+	}
+```
+
 
 
 
