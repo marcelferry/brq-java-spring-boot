@@ -178,9 +178,9 @@ mvn archetype:generate  \
 
 Faça a importação do projeto no Eclipse da mesma forma que fizemos com o projeto `simple-parent`.
 
-Vamos acessar esse projeto e apagar os arquivos padrões: `App.java` e `AppTest.java`. 
+Vamos acessar esse projeto e apagar os arquivos padrões: `App.java` e `AppTest.java`, que serão substituídos pelos arquivos que ainda iremos criar.
 
-Abra o `pom.xml` adicione a referência a projeto parent que acabamos de criar:
+Abra o `pom.xml` adicione a referência a projeto parent que acabamos de criar, subistituindo todo conteúdo da tag `<project></project>`:
 
 ```
 	<modelVersion>4.0.0</modelVersion>
@@ -229,6 +229,21 @@ Basta acessar o seu navegador com o seguinte endereço:
 ```
 http://localhost:8080/
 ```
+
+Hávera um erro, parecido ao trecho abaixo, já que ainda não colocamos nenhum conteúdo para ser visiualizado em nosso projeto.
+
+```
+Whitelabel Error Page
+
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+Thu Jul 06 07:19:26 BRT 2017
+There was an unexpected error (type=Not Found, status=404).
+No message available
+```
+
+Esse erro arrumaremos assim que disponibilizarmos conteúdo.
+
 Por default o projeto é executado na porta 8080. Para mudarmos essa configuração podemos criar uma arquivo `application.properties` na pasta `src/main/resources` com o seguinte conteúdo:
 
 ```
