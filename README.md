@@ -775,7 +775,9 @@ O resultado será:
 Hello World
 ```
 
-### Melhorando o nosso projeto
+## Melhorando o nosso projeto
+
+### Configurando o MVC
 
 Vamos agora movimentar a `index.jsp` que está em nosso projeto para a pasta `WEB-INF/views`. 
 
@@ -802,6 +804,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 } 
 ```
+
+### Entendendo as anotações
 
 A anotação `@Configuration` define que essa classe deverá ser lida como um dos substitutos dos arquivos de configuração do Spring. A anotação `@EnableWebMvc` avisa ao Spring que estamos utilizando um projeto que possui anotações do SpringMvc e que ele deverá carregá-las. A anotação `@ComponentScan` determinar em quais pacotes eu devo buscar as classes anotadas.
 
@@ -842,6 +846,9 @@ A anotação `@Bean` informa ao Spring que ele deve executar aquele método e co
 ```
 
 Nesse caso o viewResolver não será acessado diretamente, mas é configurado para que o Spring saiba como tratar o retorno de uma controller. No caso configurado acima, quando um método em uma `Controller` retornar uma String como exemplo: `home`, ele irá procurar na pasta `WEB-INF/views` um arquivo com a extensão `.jsp`, assim: `WEB-INF/views/home.jsp`. Se o método retornar uma estrutura de pasta como por exemplo `erro/erro`, ele vai tentar localizar o arquivo: `WEB-INF/views/erro/erro.jsp`.
+
+
+### Chamando nossa página de index
 
 Criaremos agora uma classe chamada `IndexController.java`
 
@@ -925,7 +932,7 @@ Vamos criar uma classe BookController para atuar com as chamadas relacionadas ao
 ```java
 @Controller
 @RequestMapping("books")
-public class BookController extends AbstractController {
+public class BookController {
 
 }
 
@@ -934,7 +941,7 @@ public class BookController extends AbstractController {
 Como já vimos, o `@RequestMapping` vai determinar o mapeamento dessa classe, então os métodos dela serão acessíveis através de:
 
 ```
-http://localhost/books/
+http://localhost:8080/books/
 ```
 
 Vamos agora criar um método: 
@@ -948,8 +955,33 @@ Vamos agora criar um método:
 	}
 ```
 
+Nesse método que acabamos de criar, o mapeamento é feito para uma variável identificada por `{ }`. Nesse caso ela se chama `{bookId}`. A chamada para acesso a esse método obrigatóriamente deverá conter o seguinte formato:
 
+```
+http://localhost:8080/books/1
+```
 
+Sendo 1, o valor que desejamos atribuir a variavel. Como vemos na implementação do método, a anotação `@PathVariable("bookId")` atribui o valor que for passado na url para a variavel `Integer bookId` do método. Dessa forma essa URL espera um valor inteiro. Caso você passe uma string como no exemplo:
+
+```
+http://localhost:8080/books/listar
+```
+
+O Spring continuará redirecionando a chamada para o mesmo método, mas retornará um erro, já que o valor "listar", não pode ser convertido para inteiro.
+
+Esse método poderia retornar uma String `livro`, mas optamos por usar um objeto um pouco mais completo chamado `ModelView`, que permitira definir o nome da view e quais valores passaremos para ela.
+
+Antes de testarmos precisaremos criar um arquivo `livro.jsp` em `WEB-INF/views/livro.jsp`. Vamos nesse momento usar um conteúdo assim:
+
+```html
+<html>
+<body>
+<h2>Livro!</h2>
+</body>
+</html>
+```
+
+Podemos agora testar novamente nossa aplicação executando o comando `mvn spring-boot:run`.
 
 # Compilando todos os projetos
 
