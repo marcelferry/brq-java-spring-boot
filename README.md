@@ -913,19 +913,7 @@ O resultado será:
 Hello World
 ```
 
-### Chamando nossa camada de Service
-
-Vamos incluir em nosso projeto a camada de service que criamos anteriormente. Para isso vamos incluir a sua dependência em nosso `pom.xml`
-
-```xml
-		<dependency>
-			<groupId>com.brq.digital.workshop</groupId>
-			<artifactId>book-service</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-```
-
-Lembre-se de ajustar a versão de acordo com a versão compilada e instalada em seu repositório local.
+### Adicionando uma nova Controller
 
 Vamos criar uma classe BookController para atuar com as chamadas relacionadas ao Serviço de Livros.
 
@@ -982,6 +970,95 @@ Antes de testarmos precisaremos criar um arquivo `livro.jsp` em `WEB-INF/views/l
 ```
 
 Podemos agora testar novamente nossa aplicação executando o comando `mvn spring-boot:run`.
+
+E acessar a url:
+
+```
+http://localhost:8080/books/1
+```
+
+Nós criamos apenas um mapeamento, veja que se você tentar acessar um endereço não configurado para ver o que acontece:
+
+```
+http://localhost:8080/books/
+```
+
+### Chamando nossa camada de Service
+
+Vamos incluir em nosso projeto a camada de service que criamos anteriormente. Para isso vamos incluir a sua dependência em nosso `pom.xml`
+
+```xml
+		<dependency>
+			<groupId>com.brq.digital.workshop</groupId>
+			<artifactId>book-service</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+```
+
+Lembre-se de ajustar a versão de acordo com a versão compilada e instalada em seu repositório local.
+
+Vamos alterar a `BookController.java` e adicionar na classe a injeção de dependência do `BookService`.
+
+```java	
+	@Autowired
+	BookService bookService;
+```
+
+Depois vamos alterar o nosso método `obtemLivro` para recuperar um livro com base no `bookId`.
+
+```java
+		ModelAndView view = new ModelAndView();
+		
+		try{
+			BookDTO book = bookService.obtemLivro(bookId);
+			view = new ModelAndView("/livro");
+			view.addObject("book",book);
+		} catch (Exception e) {
+			model.setViewName("erro/erro");
+			model.addObject("exception", mensagem);
+			return model;
+		}	
+		return view;
+```
+
+E vamos criar um JSP para melhorar a visualização do dados. Para que o spring-boot possa processar corretamente as JSPs, vamos incluir duas novas dependências.
+
+```xml
+	    <dependency>
+	        <groupId>org.apache.tomcat.embed</groupId>
+	        <artifactId>tomcat-embed-jasper</artifactId>
+	        <scope>provided</scope>
+	    </dependency>
+	    <dependency>
+	        <groupId>javax.servlet</groupId>
+	        <artifactId>jstl</artifactId>
+	    </dependency>
+```
+
+E alterar o nosso `livro.jsp` para o seguinte conteúdo:
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<html>
+<body>
+<h2>Livro!</h2>
+<p>${book.id}</p>
+<p>${book.titulo}</p>
+<p>${book.autor}</p>
+<p>${book.categoria}</p>
+<p>${book.preco}</p>
+</body>
+</html>
+```
+Podemos agora testar novamente nossa aplicação executando o comando `mvn spring-boot:run`.
+
+E acessar a url:
+
+```
+http://localhost:8080/books/1
+```
+
 
 # Compilando todos os projetos
 
