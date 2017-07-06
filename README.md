@@ -205,7 +205,9 @@ Abra o `pom.xml` adicione a referência a projeto parent que acabamos de criar, 
 		</dependency>
 	</dependencies>
 ```
-Vamor criar a classe Application.java para iniciar o SpringBoot.
+Execute o comando `mvn clean install`, e se estiver usando o Eclipse, use o botão direito no projeto, clique em `Run as... -> maven install`. Após concluído, ainda no eclipse use botão direito no projeto, clique em `Maven -> Update Project...`. Para que o eclipse possa acessar todas as bibliotecas utilizadas pelo maven no seu projeto. 
+
+Vamor agora criar a classe Application.java para iniciar o SpringBoot.
 
 ```
 @SpringBootApplication
