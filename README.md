@@ -205,7 +205,27 @@ Abra o `pom.xml` adicione a referência a projeto parent que acabamos de criar, 
 		</dependency>
 	</dependencies>
 ```
-Execute o comando `mvn clean install`, e se estiver usando o Eclipse, use o botão direito no projeto, clique em `Run as... -> maven install`. Após concluído, ainda no eclipse use botão direito no projeto, clique em `Maven -> Update Project...`. Para que o eclipse possa acessar todas as bibliotecas utilizadas pelo maven no seu projeto. 
+Quando usamos o eclipse, ele automaticamente baixa as dependências do projeto, permitindo assim que possamos continuar o desenvolvimento sem precisar executar o maven para baixá-las a cada vez que alteramos o `pom.xml`. 
+
+Caso ele não faça, ou estivermos usando a linha de comando, vamos executar o comando `mvn clean install`, e se quiser forçar o Eclipse, use o botão direito no projeto, clique em `Run as... -> maven install`. 
+
+Nos dois casos, por causa do uso do spring boot, o maven deverá baixar todas as bibliotecas, mas poderá ocorrer um erro conforme abaixo: 
+
+```
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 53.017 s
+[INFO] Finished at: 2017-07-06T10:34:29-03:00
+[INFO] Final Memory: 25M/229M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:1.5.3.RELEASE:repackage (default) on project book-rest: Execution def
+ault of goal org.springframework.boot:spring-boot-maven-plugin:1.5.3.RELEASE:repackage failed: Unable to find main class -> [Help 1]
+[ERROR]
+...
+```
+Esse erro será aceitável nesse momento, pois indica que o plugin do spring-boot não localizou uma classe main para usar como executável inicilizador do projeto.
+
+Caso após esse processo, o eclipse continuar a exibir o seu projeto com erro (ícone vermelho) sem ter erro em código fonte ou xml, use o botão direito no projeto, clique em `Maven -> Update Project...`. Para que o eclipse possa acessar todas as bibliotecas utilizadas pelo maven no seu projeto. 
 
 Vamor agora criar a classe Application.java para iniciar o SpringBoot.
 
