@@ -1032,8 +1032,8 @@ Depois vamos alterar o nosso método `obtemLivro` para recuperar um livro com ba
 			view = new ModelAndView("/livro");
 			view.addObject("book",book);
 		} catch (Exception e) {
-			model.setViewName("erro/erro");
-			model.addObject("exception", mensagem);
+			view.setViewName("erro/erro");
+			view.addObject("exception", mensagem);
 			return model;
 		}	
 		return view;
@@ -1071,12 +1071,14 @@ E alterar o nosso `livro.jsp` para o seguinte conteúdo:
 ```
 Podemos agora testar novamente nossa aplicação executando o comando `mvn spring-boot:run`.
 
+
 E acessar a url:
 
 ```
 http://localhost:8080/books/1
 ```
 
+Para o correto funcionamento a aplicação book-rest precisa estar sendo executada também na porta 8083. 
 
 # Compilando todos os projetos
 
