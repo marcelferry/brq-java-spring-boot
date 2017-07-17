@@ -14,14 +14,14 @@ public class BookController {
 	@Autowired
 	BookRepository bookRepository;
     
-    @RequestMapping(method= RequestMethod.GET)
-    public List<Book> list() {
-        return bookRepository.findAll();
-    }
-    
-    @RequestMapping(value="{id}", method= RequestMethod.GET)
-    public Book findById( @PathVariable("id") Long bookId ) {
-        return bookRepository.findOne(bookId);
-    }
+//    @RequestMapping(method= RequestMethod.GET)
+//    public List<Book> list() {
+//        return bookRepository.findAll();
+//    }
+//    
+//    @RequestMapping(value="{id}", method= RequestMethod.GET)
+//    public Book findById( @PathVariable("id") Long bookId ) {
+//        return bookRepository.findOne(bookId);
+//    }
     
 }

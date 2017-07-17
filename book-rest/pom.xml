@@ -13,11 +13,11 @@
 		<version>1.0-SNAPSHOT</version>
 		<relativePath>../simple-parent</relativePath>
 	</parent>
-	
+
 	<properties>
 		<java.version>1.7</java.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -32,14 +32,30 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>joda-time</groupId>
-		    <artifactId>joda-time</artifactId>
-		    <version>2.9.7</version>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.9.7</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.h2database</groupId>
-		    <artifactId>h2</artifactId>
-		    <version>1.4.193</version>
-		</dependency>				
-	</dependencies>	
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.193</version>
+		</dependency>
+		<!-- Adicionar documentação automatizada de Swagger -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-data-rest</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+	</dependencies>
 </project>
