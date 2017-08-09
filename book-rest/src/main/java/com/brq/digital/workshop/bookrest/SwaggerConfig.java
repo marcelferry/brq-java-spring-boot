@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Import;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -26,14 +28,17 @@ public class SwaggerConfig {
     }
     
     private ApiInfo apiInfo() {
-        ApiInfo apiInfo = new ApiInfo(
-          "API de Livros",
-          "Essa é a API de Livros criada para o treinamento.",
-          "1.0",
-          "Terms of service",
-          "marcelferry@marcelferry.com.br",
-          "License of API",
-          "API license URL");
+
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title ("API de Livros")
+                .description ("Essa é a API de Livros criada para o treinamento.")
+                .license("License of API")
+                .licenseUrl("API license URL")
+                .termsOfServiceUrl("Terms of service")
+                .version("1.0.0")
+                .contact(new Contact("Marcel Ferry","www.marcelferry.com.br", "marcelferry@marcelferry.com.br"))
+                .build();
+        		
         return apiInfo;
     }
 }
