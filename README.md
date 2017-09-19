@@ -504,15 +504,97 @@ http://localhost:8083/books
 
 E veremos os dois novos livros cadastrados.
 
-### Restfull?
+```json
+[{"id":1,"titulo":"Learning Spring Boot","autor":"Richard","categoria":"Desenvolvimento","preco":89.90,"dataCadastro":null,"ativo":true},{"id":2,"titulo":"Spring Boot in Action","autor":"Robert","categoria":"Desenvolvimento","preco":57.90,"dataCadastro":null,"ativo":true}]
+```
 
-O Spring nos fornece uma biblioteca que também automatiza o nosso trabalho de criação de serviços rest. É o spring-data-rest. Para ver ela em ação basta adicionar a seguinte dependência em nosso `pom.xml` e remover os métodos criados em nossa classe `BookController`.
+### Spring 
+
+O Spring nos fornece uma biblioteca que também automatiza o nosso trabalho de criação de serviços rest. É o spring-data-rest. Para ver ela em ação basta adicionar a seguinte dependência em nosso `pom.xml`.
 
 ```xml
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
+```
+E remover ou comentar os métodos criados em nossa classe `BookController`
+
+```java 
+//    @RequestMapping(method= RequestMethod.GET)
+//    public List<Book> list() {
+//        return bookRepository.findAll();
+//    }
+//    
+//    @RequestMapping(value="{id}", method= RequestMethod.GET)
+//    public Book findById( @PathVariable("id") Long bookId ) {
+//        return bookRepository.findOne(bookId);
+//    }
+```
+
+Podemos agora executar novamente nosso projeto e chamar a url: 
+
+
+```
+http://localhost:8083/books
+```
+
+Perceba que o método funcionará apesar de não estar disponível nenhum método mapeado para o esse endpoint, mas o resultado será um pouco diferente:
+
+```json
+{
+  "_embedded" : {
+    "books" : [ {
+      "titulo" : "Learning Spring Boot",
+      "autor" : "Richard",
+      "categoria" : "Desenvolvimento",
+      "preco" : 89.90,
+      "dataCadastro" : null,
+      "ativo" : true,
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8083/books/1"
+        },
+        "book" : {
+          "href" : "http://localhost:8083/books/1"
+        }
+      }
+    }, {
+      "titulo" : "Spring Boot in Action",
+      "autor" : "Robert",
+      "categoria" : "Desenvolvimento",
+      "preco" : 57.90,
+      "dataCadastro" : null,
+      "ativo" : true,
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8083/books/2"
+        },
+        "book" : {
+          "href" : "http://localhost:8083/books/2"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8083/books{?page,size,sort}",
+      "templated" : true
+    },
+    "profile" : {
+      "href" : "http://localhost:8083/profile/books"
+    },
+    "search" : {
+      "href" : "http://localhost:8083/books/search"
+    }
+  },
+  "page" : {
+    "size" : 20,
+    "totalElements" : 2,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}
 ```
 
 ## Criando um projeto para a camada service
