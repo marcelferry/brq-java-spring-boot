@@ -1,0 +1,10 @@
+INSERT INTO rating VALUES (1, 1, 5);
+INSERT INTO rating VALUES (2, 1, 4);
+INSERT INTO rating VALUES (3, 2, 5);
+INSERT INTO rating VALUES (4, 2, 1);
+INSERT INTO rating VALUES (5, 1, 5);
+INSERT INTO rating VALUES (6, 2, 3);
+INSERT INTO rating VALUES (7, 1, 2);
+INSERT INTO rating VALUES (8, 2, 1);
+INSERT INTO rating VALUES (9, 1, 2);
+INSERT INTO rating VALUES (10, 2, 3);
