@@ -36,12 +36,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.7</java.version>
+	    <maven.compiler.source>1.7</maven.compiler.source>
+   		<maven.compiler.target>1.7</maven.compiler.target>
 	</properties>
 	<modules>
 		<module>simple-parent</module>
-    		<module>book-rest</module>
+    	<module>book-rest</module>
 		<module>book-service</module>
 		<module>book-app</module>
-    <module>book-rest2</module>
   </modules>
 </project>
